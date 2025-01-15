@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gaming E-commerce Mall</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: url('https://images.unsplash.com/photo-1514991161505-89fdd3c11640?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MXwyMDg4NzR8MHwxfGFsbHwxfHx8fHx8fHwxNjE2NjA4MDc0&ixlib=rb-1.2.1&q=80&w=1920');
+            background-size: cover;
+            background-position: center;
+            color: #fff;
+        }
+        header {
+            background: rgba(0, 0, 0, 0.9);
+            padding: 1rem;
+            text-align: center;
+        }
+        .banner {
+            background-image: url('https://images.unsplash.com/photo-1515378801282-9a73448f3f43?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MXwyMDg4NzR8MHwxfGFsbHwxfHx8fHx8fHwxNjE2NjA4MDc0&ixlib=rb-1.2.1&q=80&w=1080');
+            height: 250px;
+            background-size: cover;
+            background-position: center;
+            margin-bottom: 1rem;
+        }
+        .container {
+            padding: 2rem;
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+        }
+        .products {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+        .product {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 1rem;
+            text-align: center;
+            background-color: #1c1c1c;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            transition: transform 0.2s;
+        }
+        .product:hover {
+            transform: scale(1.05);
+        }
+        .product img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            background: #fff; /* Added white background to make the images pop */
+            padding: 5px; /* Added padding for better appearance */
+        }
+        .cart {
+            margin-top: 2rem;
+            padding: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            background-color: #1c1c1c;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        .cart-items {
+            list-style: none;
+            padding: 0;
+        }
+        .cart-items li {
+            padding: 0.5rem 0;
+        }
+        .checkout {
+            margin-top: 1rem;
+            text-align: center;
+        }
+        .quantity-controls {
+            display: inline-flex;
+            align-items: center;
+        }
+        .quantity-controls button, .product button, .checkout button {
+            padding: 0.5rem 1rem;
+            margin: 0 0.2rem;
+            border: none;
+            border-radius: 5px;
+            background-color: #ffcc00; /* Bright yellow for buttons */
+            color: #000;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        .quantity-controls button:hover, .product button:hover, .checkout button:hover {
+            background-color: #ffc107; /* Darker yellow on hover */
+            transform: translateY(-2px);
+        }
+        h2, h3 {
+            color: #ffcc00;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Gaming E-commerce Mall</h1>
+    </header>
+    <div class="banner"></div>
+    <div class="container">
+        <h2>Featured Products</h2>
+        <div class="products">
+            <div class="product">
+                <img src="https://tse3.mm.bing.net/th?id=OIP.-24QTIOgUPuif-5ppG4g8AHaEK&pid=Api&P=0&h=180" alt="Ultimate Game Console">
+                <h3>Ultimate Game Console</h3>
+                <p>$299.99</p>
+                <button onclick="addToCart('Ultimate Game Console', 299.99)">Add to Cart</button>
+            </div>
+            <div class="product">
+                <img src="https://tse4.mm.bing.net/th?id=OIP.VXfBC12_huao4y6GM4WAFgHaEK&pid=Api&P=0&h=180" alt="Pro Gaming Headset">
+                <h3>Pro Gaming Headset</h3>
+                <p>$89.99</p>
+                <button onclick="addToCart('Pro Gaming Headset', 89.99)">Add to Cart</button>
+            </div>
+            <div class="product">
+                <img src="https://tse1.mm.bing.net/th?id=OIP.RtYjXBKnx3DfMT4INGvDQAAAAA&pid=Api&P=0&h=180" alt="Ergonomic Gaming Mouse">
+                <h3>Ergonomic Gaming Mouse</h3>
+                <p>$49.99</p>
+                <button onclick="addToCart('Ergonomic Gaming Mouse', 49.99)">Add to Cart</button>
+            </div>
+            <div class="product">
+                <img src="https://tse3.mm.bing.net/th?id=OIP.1fgtY--I3JDNyAE7mUCTSAHaE8&pid=Api&P=0&h=180" alt="RGB Gaming Keyboard">
+                <h3>RGB Gaming Keyboard</h3>
+                <p>$69.99</p>
+                <button onclick="addToCart('RGB Gaming Keyboard', 69.99)">Add to Cart</button>
+            </div>
+        </div>
+        <div class="cart">
+            <h2>Cart</h2>
+            <ul class="cart-items"></ul>
+            <p><strong>Total:</strong> $<span id="cart-total">0.00</span></p>
+            <div class="checkout">
+                <button onclick="checkout()">Purchase Order</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        const cart = [];
+
+        function addToCart(name, price) {
+            const existingProduct = cart.find(item => item.name === name);
+            if (existingProduct) {
+                existingProduct.quantity += 1;
+            } else {
+                cart.push({ name, price, quantity: 1 });
+            }
+            updateCart();
+        }
+
+        function removeFromCart(name) {
+            const index = cart.findIndex(item => item.name === name);
+            if (index !== -1) {
+                cart.splice(index, 1);
+            }
+            updateCart();
+        }
+
+        function updateQuantity(name, delta) {
+            const product = cart.find(item => item.name === name);
+            if (product) {
+                product.quantity += delta;
+                if (product.quantity <= 0) {
+                    removeFromCart(name);
+                } else {
+                    updateCart();
+                }
+            }
+        }
+
+        function updateCart() {
+            const cartItemsContainer = document.querySelector('.cart-items');
+            const cartTotal = document.getElementById('cart-total');
+
+            cartItemsContainer.innerHTML = '';
+            let total = 0;
+
+            cart.forEach(item => {
+                const li = document.createElement('li');
+                li.textContent = `${item.name} - $${item.price.toFixed(2)} x ${item.quantity} = $${(item.price * item.quantity).toFixed(2)}`;
+                const quantityControls = document.createElement('div');
+                quantityControls.classList.add('quantity-controls');
+                quantityControls.innerHTML = `
+                    <button onclick="updateQuantity('${item.name}', 1)">+</button>
+                    <button onclick="updateQuantity('${item.name}', -1)">-</button>
+                    <button onclick="removeFromCart('${item.name}')">Remove</button>
+                `;
+                li.appendChild(quantityControls);
+                cartItemsContainer.appendChild(li);
+                total += item.price * item.quantity;
+            });
+
+            cartTotal.textContent = total.toFixed(2);
+        }
+
+        function checkout() {
+            if (cart.length === 0) {
+                alert('Your cart is empty!');
+            } else {
+                alert('Thank you for your purchase!');
+                cart.length = 0;
+                updateCart();
+            }
+        }
+    </script>
+</body>
+</html>
